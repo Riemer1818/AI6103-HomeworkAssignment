@@ -1,6 +1,6 @@
 export CUBLAS_WORKSPACE_CONFIG=:16:8
 
-python3 main.py \
+python3 AI6103-HomeworkAssignment/main.py \
 --dataset_dir ./datasets \
 --batch_size 128 \
 --epochs 300 \
