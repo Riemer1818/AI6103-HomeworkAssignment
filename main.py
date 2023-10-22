@@ -107,9 +107,11 @@ def main(args):
     if args.lr_scheduler:
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, args.epochs, verbose=True)
+        print("using cosine Annealing)")
     else:
         scheduler = torch.optim.lr_scheduler.ConstantLR(
-            optimizer, factor=1.0, total_iters=args.epochs)
+            optimizer, factor=1.0, total_iters=args.epochs) #this one already constantly decreases the lr?? 
+        print("using constant lr scheduler")
 
     stat_training_loss = []
     stat_val_loss = []
