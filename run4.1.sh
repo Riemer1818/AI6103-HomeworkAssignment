@@ -8,5 +8,5 @@ python3 AI6103-HomeworkAssignment/main.py \
 --lr_scheduler \
 --mixup \
 --seed 0 \
---fig_name lr=0.05-lr_sche=CALR-wd=0-mixup.png \
+--fig_name 4.1-lr=0.05-lr_sche=CALR-wd=0-mixup.png \
 --test

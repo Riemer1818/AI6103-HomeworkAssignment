@@ -7,6 +7,6 @@ python3 AI6103-HomeworkAssignment/main.py \
 --lr 0.01 --wd 0 \
 --mixup \
 --seed 0 \
---fig_name lr=0.01-lr_sche-wd=0-mixup.png \
+--fig_name 3.3-lr=0.01-lr_sche-wd=0-mixup.png \
 --test
 
