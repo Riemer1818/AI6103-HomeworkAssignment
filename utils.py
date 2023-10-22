@@ -32,6 +32,6 @@ def plot_loss_acc(train_loss, val_loss, train_acc, val_acc, fig_name):
     fig.tight_layout()
     plt.title(fig_name)
 
-    plt.savefig(os.path.join('./AI6104-HomeworkAssignment/diagram', fig_name))
+    plt.savefig(os.path.join('./AI6103-HomeworkAssignment/diagram', fig_name))
 
-    np.savez(os.path.join('./AI6104-HomeworkAssignment/diagram', fig_name.replace('.png ', '.npz')), train_loss=train_loss, val_loss=val_loss, train_acc=train_acc, val_acc=val_acc)
+    np.savez(os.path.join('./AI6103-HomeworkAssignment/diagram', fig_name.replace('.png ', '.npz')), train_loss=train_loss, val_loss=val_loss, train_acc=train_acc, val_acc=val_acc)
