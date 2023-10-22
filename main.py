@@ -99,10 +99,10 @@ def main(args):
     # criterion
     criterion = torch.nn.CrossEntropyLoss().cuda()
 
-    # optimizer
+    # optimizer with weight decay
     optimizer = torch.optim.SGD(
         model.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.wd)
-   
+
    # scheduler
     if args.lr_scheduler:
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
