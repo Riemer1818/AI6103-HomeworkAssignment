@@ -5,15 +5,6 @@ import numpy as np
 from mobilenet import MobileNet
 from utils import plot_loss_acc
 
-def learning_rate_schedule_cosine(optimizer, epoch, lr):
-    """learning rate schedule cosine annealing"""
-    lr = 0.5 * lr * (1 + np.cos(np.pi * epoch / args.epochs))
-
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
-    return lr
-
-
 def get_train_valid_loader(
         dataset_dir,
         batch_size,
