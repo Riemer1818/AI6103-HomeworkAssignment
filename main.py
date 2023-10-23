@@ -5,10 +5,38 @@ import numpy as np
 from mobilenet import MobileNet
 from utils import plot_loss_acc
 
+def mixup_data(x, y, alpha=0):
+    """In Class MixUp function. Blends to inputs and labels together.
+    
+    Arguments:
+        x {tensor} -- batch of images
+        y {tensor} -- batch of labels
+        alpha {float} -- mixup hyperparameter (default: {0.0})
+        
+    Returns:
+        mixed_x {tensor} -- mixed images
+        y_a {tensor} -- mixed labels
+        y_b {tensor} -- mixed labels
+        lam {float} -- lambda value
+    
+    """
+
+    # Generate mixed samples and labels
+    if alpha > 0:
+        lam = np.random.beta(alpha, alpha) # how does this seeding work? 
+    else:
+        lam = 1
+
+    batch_size = x.size()[0]
+    index = torch.randperm(batch_size)
+    mixed_x = lam * x + (1 - lam) * x[index, :]
+    y_a, y_b = y, y[index]
+
+    return mixed_x, y_a, y_b, lam
+
 def get_train_valid_loader(
         dataset_dir,
-        batch_size,
-        seed):
+        batch_size):
     
     dataset = torchvision.datasets.CIFAR100(
         root = dataset_dir, 
@@ -51,7 +79,6 @@ def get_train_valid_loader(
     return train_loader, valid_loader
 
 
-
 def get_test_loader(
         dataset_dir,
         batch_size):
@@ -77,6 +104,7 @@ def get_test_loader(
     test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
     
     return test_loader
+
 
 def main(args):
     # fix random seeds
@@ -118,6 +146,7 @@ def main(args):
     stat_training_acc = []
     stat_val_acc = []
 
+    # training 
     for epoch in range(args.epochs):
         training_loss = 0
         training_acc = 0
@@ -126,18 +155,26 @@ def main(args):
         val_acc = 0
         val_samples = 0
 
-        # training
         model.train()
+
+        # training loop
         for imgs, labels in train_loader:
             imgs = imgs.cuda()
             labels = labels.cuda()
 
+
+            imgs, labels, labels_b, lam = mixup_data(imgs, labels, args.alpha)
+
+
             batch_size = imgs.shape[0]
             optimizer.zero_grad()
             logits = model.forward(imgs)
-            loss = criterion(logits, labels)
+
+            # TODO: test if mixup at alpha 0.0 doesn't change output
+            loss = criterion(logits, labels) + (1 - lam) * criterion(logits, labels_b)
             loss.backward()
             optimizer.step()
+
             _, top_class = logits.topk(1, dim=1)
             equals = top_class == labels.view(*top_class.shape) # addition by RIemer
             training_acc += torch.sum(equals.type(torch.FloatTensor)).item()
@@ -205,8 +242,15 @@ if __name__ == '__main__':
     parser.add_argument('--fig_name', type=str, help='')
     parser.add_argument('--lr_scheduler', action='store_true')
     parser.set_defaults(lr_scheduler=False)
+
+    # mixup.  Should be float.  0.0 is no mixup.  1.0 is full mixup.
+    parser.add_argument("--alpha", type=float, help="MixUp alpha value (0.0 for no MixUp)")
+    parser.add_default(alpha=0.0)
+
+    # doesn't do anything anymore.  Just here for backwards compatibility
     parser.add_argument('--mixup', action='store_true')
     parser.set_defaults(mixup=False)
+
     parser.add_argument('--test', action='store_true')
     parser.set_defaults(test=False)
     parser.add_argument('--save_images', action='store_true')
