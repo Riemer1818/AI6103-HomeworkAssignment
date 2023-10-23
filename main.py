@@ -115,7 +115,7 @@ def main(args):
     # train val test
     # AI6103 students: You need to create the dataloaders youself
     train_loader, valid_loader = get_train_valid_loader(
-        args.dataset_dir, args.batch_size, args.seed)
+        args.dataset_dir, args.batch_size)
     if args.test:
         test_loader = get_test_loader(args.dataset_dir, args.batch_size)
 
