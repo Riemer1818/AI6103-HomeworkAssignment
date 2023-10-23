@@ -10,4 +10,3 @@ python3 AI6103-HomeworkAssignment/main.py \
 --mixup \
 --seed 0 \
 --fig_name 6.1-lr=0.05-lr_sche=CALR-wd=0.0005-mixup=0.2.png \
---test  
