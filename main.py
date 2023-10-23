@@ -245,7 +245,7 @@ if __name__ == '__main__':
 
     # mixup.  Should be float.  0.0 is no mixup.  1.0 is full mixup.
     parser.add_argument("--alpha", type=float, help="MixUp alpha value (0.0 for no MixUp)")
-    parser.add_default(alpha=0.0)
+    parser.set_default(alpha=0.0)
 
     # doesn't do anything anymore.  Just here for backwards compatibility
     parser.add_argument('--mixup', action='store_true')
